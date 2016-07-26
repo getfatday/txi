@@ -1,0 +1,26 @@
+{
+  "name": "tablexi",
+  "version": "0.0.1",
+  "description": "Table XI Programming Challenge",
+  "main": "index.js",
+  "bin": {
+    "tablexi": "./cli.js"
+  },
+  "scripts": {
+    "test": "node index.js menu-good.txt"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/getfatday/txi.git"
+  },
+  "author": "Ian Anderson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/getfatday/txi/issues"
+  },
+  "homepage": "https://github.com/getfatday/txi",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.5.3"
+  }
+}
