@@ -7,7 +7,7 @@
     "tablexi": "./cli.js"
   },
   "scripts": {
-    "test": "node index.js menu-good.txt"
+    "test": "mocha test"
   },
   "repository": {
     "type": "git",
@@ -22,5 +22,8 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "mocha": "^2.5.3"
+  },
+  "dependencies": {
+    "through2": "^2.0.1"
   }
 }

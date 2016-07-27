@@ -1,4 +1,4 @@
-TXI
+Table XI
 ---
 
 ## Install

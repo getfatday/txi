@@ -1,5 +1,6 @@
 var fs = require('fs');
 var path = require('path');
+var through = require('through2');
 
 function readData(fp, cb) {
     fs.readFile(path.resolve(process.cwd(), fp), function (err, data) {
@@ -17,31 +18,24 @@ function readData(fp, cb) {
     });
 }
 
-function pow(value) {
-    return 1 << value;
+function flag(seed, value) {
+    return seed & (1 << value);
 }
 
-function flags(value, length) {
-    return ((new Array(length + 1)).join('0') + (value >>> 0).toString(2)).slice(-length).split('').map(function (i) {
-        return parseInt(i);
-    });
-}
-
-function sum(flags) {
+function sum(seed) {
     return function(result, v, i) {
-        return result + ((flags[i] || 0) ? v : 0);
+        return result + (flag(seed, i) ? v : 0);
     };
 };
 
 function solution(seed, values) {
-    return values.reduce(sum(flags(seed, values.length)), 0);
+    return values.reduce(sum(seed), 0);
 };
 
 function itemized(values) {
     return function (seed) {
-        var flag = flags(seed, values.length);
         return values.filter(function (v, i) {
-            return flag[i];
+            return flag(seed, i);
         });
     };
 };
@@ -52,7 +46,7 @@ function main(fp, cb) {
 
         var total = data.total;
         var values = data.items.map(function (v) { return v[1] });
-        var length = pow(data.items.length);
+        var length = 1 << data.items.length;
         var count = 0;
         var solutions = [];
 
