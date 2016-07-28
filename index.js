@@ -1,7 +1,7 @@
 var fs = require('fs');
 var path = require('path');
-var through = require('through2');
 
+// Parse data file
 function readData(fp, cb) {
     fs.readFile(path.resolve(process.cwd(), fp), function (err, data) {
         if (err) return cb(err);
@@ -18,20 +18,19 @@ function readData(fp, cb) {
     });
 }
 
+// Test if value bit is set in the seed
 function flag(seed, value) {
     return seed & (1 << value);
 }
 
+// Sum of items for a given seed
 function sum(seed) {
     return function(result, v, i) {
         return result + (flag(seed, i) ? v : 0);
     };
 };
 
-function solution(seed, values) {
-    return values.reduce(sum(seed), 0);
-};
-
+// Returns list of values used for a seed
 function itemized(values) {
     return function (seed) {
         return values.filter(function (v, i) {
@@ -40,23 +39,28 @@ function itemized(values) {
     };
 };
 
-function main(fp, cb) {
+function main(fp, options, cb) {
+    if (!cb) {
+        cb = options;
+        options = {};
+    }
+    // Read file path
     readData(fp, function(err, data) {
         if (err) return cb(err);
 
-        var total = data.total;
+        var total = options.total || data.total;
         var values = data.items.map(function (v) { return v[1] });
         var length = 1 << data.items.length;
         var count = 0;
         var solutions = [];
-
+        // Loop through all possible sums and check if solution matches total
         while (count < length) {
-            if (solution(count, values) === total) solutions.push(count);
+            if (values.reduce(sum(count), 0) === total) solutions.push(count);
             count++;
         }
 
         return cb(null, {
-            total: data.total,
+            total: total,
             items: data.items,
             solutions: solutions.map(itemized(data.items))
         });
